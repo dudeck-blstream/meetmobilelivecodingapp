@@ -10,6 +10,9 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
+        project.ext.set("archivesBaseName", "Kameleon-" + versionName + "-b" + versionCode);
     }
     buildTypes {
         release {
