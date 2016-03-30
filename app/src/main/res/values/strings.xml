@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Kameleon</string>
+    <string name="beacon_info_pattern" formatted="false">Beacon %s\nDistance ~ %.1fm</string>
+    <string name="beacon_discovered">Beacon discovered!</string>
+    <string name="discovering_beacons">Discovering beacons…</string>
+    <string name="bls_email_address">blstreamlublin@gmail.com</string>
 </resources>

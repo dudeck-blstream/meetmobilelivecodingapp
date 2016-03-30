@@ -1,94 +1,137 @@
 package com.blstream.kameleon;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
-import com.blstream.kameleon.estimote.BeaconID;
-import com.blstream.kameleon.estimote.EstimoteCloudBeaconDetails;
-import com.blstream.kameleon.estimote.EstimoteCloudBeaconDetailsFactory;
-import com.blstream.kameleon.estimote.NearestBeaconManager;
-import com.blstream.kameleon.estimote.ProximityContentManager;
+import com.blstream.kameleon.model.TestBeacon;
+import com.blstream.kameleon.model.TestBeacons;
+import com.blstream.kameleon.util.BeaconUtils;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
-import com.estimote.sdk.SystemRequirementsChecker;
-import com.estimote.sdk.cloud.model.Color;
+import com.estimote.sdk.Utils;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int BACKGROUND_COLOR_NEUTRAL = android.graphics.Color.rgb(255, 255, 255);
     private BeaconManager beaconManager;
-    private String scanId;
-    ProximityContentManager proximityContentManager;
+    private TestBeacons testBeacons;
 
-    private static final String TAG = "MainActivity";
+    private View progressView;
 
-    private static final Map<Color, Integer> BACKGROUND_COLORS = new HashMap<>();
-
-    static {
-        BACKGROUND_COLORS.put(Color.ICY_MARSHMALLOW, android.graphics.Color.rgb(109, 170, 199));
-        BACKGROUND_COLORS.put(Color.BLUEBERRY_PIE, android.graphics.Color.rgb(98, 84, 158));
-        BACKGROUND_COLORS.put(Color.MINT_COCKTAIL, android.graphics.Color.rgb(155, 186, 160));
-    }
+    private TextView beaconBlue;
+    private TextView beacon2;
+    private TextView beacon3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        testBeacons = new TestBeacons();
 
-        proximityContentManager = new ProximityContentManager(this,
-                Arrays.asList(
-                        new BeaconID("B9407F30-F5F8-466E-AFF9-25556B57FE6D", 34695, 57914)),
-                new EstimoteCloudBeaconDetailsFactory());
-        proximityContentManager.setListener(new ProximityContentManager.Listener() {
-            @Override
-            public void onContentChanged(Object content) {
-                String text;
-                Integer backgroundColor;
-                if (content != null) {
-                    EstimoteCloudBeaconDetails beaconDetails = (EstimoteCloudBeaconDetails) content;
-                    text = "You're in " + beaconDetails.getBeaconName() + "'s range!";
-                    backgroundColor = BACKGROUND_COLORS.get(beaconDetails.getBeaconColor());
-                } else {
-                    text = "No beacons in range.";
-                    backgroundColor = null;
-                }
-                ((TextView) findViewById(R.id.text)).setText(text);
-                findViewById(R.id.container).setBackgroundColor(
-                        backgroundColor != null ? backgroundColor : BACKGROUND_COLOR_NEUTRAL);
-            }
-        });
+        progressView = findViewById(R.id.progress);
+
+        beaconBlue = (TextView) findViewById(R.id.beacon1);
+        beacon2 = (TextView) findViewById(R.id.beacon2);
+        beacon3 = (TextView) findViewById(R.id.beacon3);
+
+        setupBeaconManager();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void setupBeaconManager() {
+        beaconManager = new BeaconManager(this);
+        beaconManager.connect(new MyServiceReadyCallback());
+        beaconManager.setRangingListener(new MyRangingListener());
+        beaconManager.setMonitoringListener(new MyMonitoringListener());
+    }
 
-        if (!SystemRequirementsChecker.checkWithDefaultDialogs(this)) {
-            Log.e(TAG, "Can't scan for beacons, some pre-conditions were not met");
-            Log.e(TAG, "Read more about what's required at: http://estimote.github.io/Android-SDK/JavaDocs/com/estimote/sdk/SystemRequirementsChecker.html");
-            Log.e(TAG, "If this is fixable, you should see a popup on the app's screen right now, asking to enable what's necessary");
-        } else {
-            Log.d(TAG, "Starting ProximityContentManager content updates");
-            proximityContentManager.startContentUpdates();
+    private void updateBeaconData(Iterable<Beacon> list) {
+        for (Beacon beacon : list) {
+            TestBeacon beaconByMinor = testBeacons.findBeaconByMinor(beacon.getMinor());
+            if (beaconByMinor != null) {
+                if (!beaconByMinor.isDiscovered()) {
+                    double accuracy = Utils.computeAccuracy(beacon);
+                    beaconByMinor.setAccuracy(accuracy);
+
+                    if (accuracy < BeaconUtils.DISCOVER_MIN_VALUE) {
+                        beaconByMinor.setDiscovered(true);
+                    }
+                }
+            }
         }
+        refreshUI();
 
+    }
+
+    private void refreshUI() {
+        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
+        TestBeacon testBeaconBlue = testBeacons.getByName(TestBeacons.BEACON_BLUE);
+        if (testBeaconBlue.isDiscovered()) {
+            beaconBlue.setText(getString(R.string.beacon_discovered));
+            beaconBlue.setCompoundDrawablesWithIntrinsicBounds(discoveredDrawable, null, null, null);
+            beaconBlue.setBackgroundColor(testBeaconBlue.getColor());
+        } else {
+            beaconBlue.setText(getString(R.string.beacon_info_pattern,
+                    TestBeacons.BEACON_BLUE,
+                    testBeaconBlue.getAccuracy()));
+            int colorWithAlpha = BeaconUtils.adjustAlpha(testBeaconBlue);
+            beaconBlue.setBackgroundColor(colorWithAlpha);
+        }
+    }
+
+    private void sendEmail() {
+        final Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
+                Uri.fromParts("mailto", getString(R.string.bls_email_address), null));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MeetMobile 5/4/2016 contest");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Am I the winner?");
+
+        startActivity(Intent.createChooser(emailIntent, "Choose your email app"));
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-
-        beaconManager.stopNearableDiscovery(scanId);
         beaconManager.disconnect();
+        super.onDestroy();
     }
 
+    private class MyRangingListener implements BeaconManager.RangingListener {
+        @Override
+        public void onBeaconsDiscovered(Region region, List<Beacon> list) {
+            if (testBeacons.areAllDiscovered()) {
+                sendEmail();
+                beaconManager.stopRanging(TestBeacons.getRegion());
+                beaconManager.stopMonitoring(TestBeacons.getRegion());
+            } else {
+                updateBeaconData(list);
+            }
+        }
+    }
 
+    private class MyMonitoringListener implements BeaconManager.MonitoringListener {
+        @Override
+        public void onEnteredRegion(Region region, List<Beacon> list) {
+            updateBeaconData(list);
+            progressView.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onExitedRegion(Region region) {
+            progressView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private class MyServiceReadyCallback implements BeaconManager.ServiceReadyCallback {
+        @Override
+        public void onServiceReady() {
+            beaconManager.startRanging(TestBeacons.getRegion());
+            beaconManager.startMonitoring(TestBeacons.getRegion());
+        }
+    }
 }
