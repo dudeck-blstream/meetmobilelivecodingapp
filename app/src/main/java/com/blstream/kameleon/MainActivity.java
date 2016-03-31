@@ -1,6 +1,6 @@
 package com.blstream.kameleon;
 
-import com.blstream.kameleon.model.BeaconId;
+import com.blstream.kameleon.model.BeaconItem;
 import com.blstream.kameleon.model.CompetitionBeacons;
 import com.blstream.kameleon.util.BeaconUtils;
 import com.estimote.sdk.Beacon;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBeaconData(Iterable<Beacon> list) {
         for (Beacon beacon : list) {
-            BeaconId beaconByMinor = testBeacons.findBeaconByMinor(beacon.getMinor());
+            BeaconItem beaconByMinor = testBeacons.findBeaconByMinor(beacon.getMinor());
             if (beaconByMinor != null) {
                 if (!beaconByMinor.isDiscovered()) {
                     double accuracy = Utils.computeAccuracy(beacon);
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshUI() {
         //        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
-        //        BeaconId testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
+        //        BeaconItem testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
         //        //TODO: list all beacons?!
         //        if (testBeaconBlue != null && testBeaconBlue.isDiscovered()) {
         //            beaconBlue.setText(getString(R.string.beacon_discovered));

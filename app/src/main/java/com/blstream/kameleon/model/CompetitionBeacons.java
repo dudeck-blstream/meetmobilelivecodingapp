@@ -10,7 +10,7 @@ import java.util.Objects;
 import com.estimote.sdk.cloud.model.Color;
 
 
-public class CompetitionBeacons extends ArrayList<BeaconId> {
+public class CompetitionBeacons extends ArrayList<BeaconItem> {
 
     private static final Map<com.estimote.sdk.cloud.model.Color, Integer> BACKGROUND_COLORS = new HashMap<>();
 
@@ -27,8 +27,8 @@ public class CompetitionBeacons extends ArrayList<BeaconId> {
         return new Region(REGION_NAME, null, null, null);
     }
 
-    public BeaconId findBeaconByMinor(int minor) {
-        for (BeaconId beacon : this) {
+    public BeaconItem findBeaconByMinor(int minor) {
+        for (BeaconItem beacon : this) {
             if (beacon.getMinor() == minor) {
                 return beacon;
             }
@@ -36,8 +36,8 @@ public class CompetitionBeacons extends ArrayList<BeaconId> {
         return null;
     }
 
-    public BeaconId getByName(String name) {
-        for (BeaconId beacon : this) {
+    public BeaconItem getByName(String name) {
+        for (BeaconItem beacon : this) {
             if (Objects.equals(beacon.getName(), name)) {
                 return beacon;
             }
@@ -46,7 +46,7 @@ public class CompetitionBeacons extends ArrayList<BeaconId> {
     }
 
     public boolean areAllDiscovered() {
-        for (BeaconId beacon : this) {
+        for (BeaconItem beacon : this) {
             if (!beacon.isDiscovered()) {
                 return false;
             }

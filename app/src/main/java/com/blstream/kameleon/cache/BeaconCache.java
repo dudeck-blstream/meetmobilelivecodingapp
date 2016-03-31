@@ -1,13 +1,13 @@
 package com.blstream.kameleon.cache;
 
-import com.estimote.sdk.cloud.model.BeaconInfo;
+import com.blstream.kameleon.model.BeaconItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BeaconCache {
     private static BeaconCache ourInstance = new BeaconCache();
-    private List<BeaconInfo> beacons = new ArrayList<>();
+    private List<BeaconItem> beacons = new ArrayList<>();
 
     public static BeaconCache getInstance() {
         return ourInstance;
@@ -16,11 +16,11 @@ public class BeaconCache {
     private BeaconCache() {
     }
 
-    public List<BeaconInfo> getBeacons() {
+    public List<BeaconItem> getBeacons() {
         return beacons;
     }
 
-    public void addBeacon(BeaconInfo beaconInfo){
+    public void addBeacon(BeaconItem beaconInfo){
         beacons.add(beaconInfo);
     }
 }
