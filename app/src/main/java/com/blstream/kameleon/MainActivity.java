@@ -1,5 +1,6 @@
 package com.blstream.kameleon;
 
+import com.blstream.kameleon.cache.BeaconCache;
 import com.blstream.kameleon.model.BeaconItem;
 import com.blstream.kameleon.model.CompetitionBeacons;
 import com.blstream.kameleon.util.BeaconUtils;
@@ -13,7 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -30,13 +31,15 @@ public class MainActivity extends AppCompatActivity {
     View progressView;
 
     @Bind(R.id.beacon1)
-    TextView beaconBlue;
+    ImageView beaconBlue;
 
     @Bind(R.id.beacon2)
-    TextView beacon2;
+    ImageView beacon2;
 
     @Bind(R.id.beacon3)
-    TextView beacon3;
+    ImageView beacon3;
+
+    private ImageView[] beacons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        setupBeaconsIcon();
+
         testBeacons = new CompetitionBeacons();
 
         setupBeaconManager();
+    }
+
+    private void setupBeaconsIcon() {
+        beacons = new ImageView[] {beaconBlue, beacon2, beacon3};
     }
 
     private void setupBeaconManager() {
@@ -57,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBeaconData(Iterable<Beacon> list) {
+
         for (Beacon beacon : list) {
             BeaconItem beaconByMinor = testBeacons.findBeaconByMinor(beacon.getMinor());
             if (beaconByMinor != null) {
@@ -74,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshUI() {
+        for (final BeaconItem beaconItem : BeaconCache.getInstance().getBeacons()) {
+
+
+
+
+        }
+
+
         //        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
         //        BeaconItem testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
         //        //TODO: list all beacons?!

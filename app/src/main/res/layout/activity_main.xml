@@ -1,39 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="#CCC"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
-        <TextView
+        <ImageView
             android:id="@+id/beacon1"
-            style="@style/BeaconItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/BeaconItem" />
 
-        <TextView
+        <ImageView
             android:id="@+id/beacon2"
-            style="@style/BeaconItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/BeaconItem" />
 
-        <TextView
+        <ImageView
             android:id="@+id/beacon3"
-            style="@style/BeaconItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            style="@style/BeaconItem" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
