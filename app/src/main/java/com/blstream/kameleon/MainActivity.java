@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.blstream.kameleon.model.TestBeacon;
-import com.blstream.kameleon.model.TestBeacons;
+import com.blstream.kameleon.model.BeaconId;
+import com.blstream.kameleon.model.CompetentationBeacons;
 import com.blstream.kameleon.util.BeaconUtils;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -22,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private BeaconManager beaconManager;
-    private TestBeacons testBeacons;
+    private CompetentationBeacons testBeacons;
 
     private View progressView;
 
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        testBeacons = new TestBeacons();
+        testBeacons = new CompetentationBeacons();
 
         progressView = findViewById(R.id.progress);
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBeaconData(Iterable<Beacon> list) {
         for (Beacon beacon : list) {
-            TestBeacon beaconByMinor = testBeacons.findBeaconByMinor(beacon.getMinor());
+            BeaconId beaconByMinor = testBeacons.findBeaconByMinor(beacon.getMinor());
             if (beaconByMinor != null) {
                 if (!beaconByMinor.isDiscovered()) {
                     double accuracy = Utils.computeAccuracy(beacon);
@@ -71,19 +71,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshUI() {
-        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
-        TestBeacon testBeaconBlue = testBeacons.getByName(TestBeacons.BEACON_BLUE);
-        if (testBeaconBlue.isDiscovered()) {
-            beaconBlue.setText(getString(R.string.beacon_discovered));
-            beaconBlue.setCompoundDrawablesWithIntrinsicBounds(discoveredDrawable, null, null, null);
-            beaconBlue.setBackgroundColor(testBeaconBlue.getColor());
-        } else {
-            beaconBlue.setText(getString(R.string.beacon_info_pattern,
-                    TestBeacons.BEACON_BLUE,
-                    testBeaconBlue.getAccuracy()));
-            int colorWithAlpha = BeaconUtils.adjustAlpha(testBeaconBlue);
-            beaconBlue.setBackgroundColor(colorWithAlpha);
-        }
+//        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
+//        BeaconId testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
+//        //TODO: list all beacons?!
+//        if (testBeaconBlue != null && testBeaconBlue.isDiscovered()) {
+//            beaconBlue.setText(getString(R.string.beacon_discovered));
+//            beaconBlue.setCompoundDrawablesWithIntrinsicBounds(discoveredDrawable, null, null, null);
+//            beaconBlue.setBackgroundColor(testBeaconBlue.getColor());
+//        } else {
+//            beaconBlue.setText(getString(R.string.beacon_info_pattern,
+//                    CompetentationBeacons.BEACON_BLUE,
+//                    testBeaconBlue.getAccuracy()));
+//            int colorWithAlpha = BeaconUtils.adjustAlpha(testBeaconBlue);
+//            beaconBlue.setBackgroundColor(colorWithAlpha);
+//        }
     }
 
     private void sendEmail() {
@@ -104,12 +105,14 @@ public class MainActivity extends AppCompatActivity {
     private class MyRangingListener implements BeaconManager.RangingListener {
         @Override
         public void onBeaconsDiscovered(Region region, List<Beacon> list) {
-            if (testBeacons.areAllDiscovered()) {
-                sendEmail();
-                beaconManager.stopRanging(TestBeacons.getRegion());
-                beaconManager.stopMonitoring(TestBeacons.getRegion());
-            } else {
-                updateBeaconData(list);
+            if(!list.isEmpty()) {
+                if (testBeacons.areAllDiscovered()) {
+                    sendEmail();
+                    beaconManager.stopRanging(CompetentationBeacons.getRegion());
+                    beaconManager.stopMonitoring(CompetentationBeacons.getRegion());
+                } else {
+                    updateBeaconData(list);
+                }
             }
         }
     }
@@ -130,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
     private class MyServiceReadyCallback implements BeaconManager.ServiceReadyCallback {
         @Override
         public void onServiceReady() {
-            beaconManager.startRanging(TestBeacons.getRegion());
-            beaconManager.startMonitoring(TestBeacons.getRegion());
+            beaconManager.startRanging(CompetentationBeacons.getRegion());
+            beaconManager.startMonitoring(CompetentationBeacons.getRegion());
         }
     }
 }

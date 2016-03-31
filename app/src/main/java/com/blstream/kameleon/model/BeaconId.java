@@ -1,6 +1,6 @@
 package com.blstream.kameleon.model;
 
-public class TestBeacon {
+public class BeaconId {
     private final String uuid;
     private final int minor;
     private final int major;
@@ -9,7 +9,7 @@ public class TestBeacon {
     private double accuracy;
     private boolean isDiscovered;
 
-    public TestBeacon(String uuid, int minor, int major, int color, String name) {
+    public BeaconId(String uuid, int minor, int major, int color, String name) {
         this.uuid = uuid;
         this.minor = minor;
         this.major = major;
