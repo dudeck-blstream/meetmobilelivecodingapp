@@ -35,6 +35,6 @@ public class BeaconUtils {
     }
 
     private static int getColor(BeaconItem beaconItem){
-        return BEACON_COLORS.get(beaconItem.color);
+        return BEACON_COLORS.get(beaconItem.getBeaconInfo().color);
     }
 }

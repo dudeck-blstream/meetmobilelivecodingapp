@@ -38,7 +38,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
 
     @Override
     public void success(BeaconInfo beaconInfo) {
-        BeaconCache.getInstance().addBeacon((BeaconItem)beaconInfo);
+        BeaconCache.getInstance().addBeacon(new BeaconItem(beaconInfo));
         if(counter <= competetionMacs.length){
             startMainActivity();
         } else {

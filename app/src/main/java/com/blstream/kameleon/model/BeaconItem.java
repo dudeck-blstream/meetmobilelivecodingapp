@@ -2,22 +2,18 @@ package com.blstream.kameleon.model;
 
 import android.annotation.SuppressLint;
 
-import com.estimote.sdk.MacAddress;
 import com.estimote.sdk.cloud.model.BeaconInfo;
-import com.estimote.sdk.cloud.model.BeaconInfoSettings;
-import com.estimote.sdk.cloud.model.Color;
-
-import java.util.UUID;
 
 
 @SuppressLint("ParcelCreator")
-public class BeaconItem extends BeaconInfo {
+public class BeaconItem {
     private boolean isDiscovered;
     private double accuracy;
+    private BeaconInfo beaconInfo;
 
 
-    public BeaconItem(UUID uuid, Integer major, Integer minor, MacAddress macAddress, String name, Color color, Double batteryLifeExpectancyInDays, BeaconInfoSettings settings) {
-        super(uuid, major, minor, macAddress, name, color, batteryLifeExpectancyInDays, settings);
+    public BeaconItem(BeaconInfo beaconInfo) {
+        this.beaconInfo = beaconInfo;
     }
 
     public boolean isDiscovered() {
@@ -36,4 +32,7 @@ public class BeaconItem extends BeaconInfo {
         this.accuracy = accuracy;
     }
 
+    public BeaconInfo getBeaconInfo() {
+        return beaconInfo;
+    }
 }
