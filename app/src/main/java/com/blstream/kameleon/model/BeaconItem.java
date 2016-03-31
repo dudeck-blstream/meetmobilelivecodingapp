@@ -1,11 +1,7 @@
 package com.blstream.kameleon.model;
 
-import android.annotation.SuppressLint;
-
 import com.estimote.sdk.cloud.model.BeaconInfo;
 
-
-@SuppressLint("ParcelCreator")
 public class BeaconItem {
     private boolean isDiscovered;
     private double accuracy;

@@ -39,23 +39,22 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     @Override
     public void success(BeaconInfo beaconInfo) {
         BeaconCache.getInstance().addBeacon(new BeaconItem(beaconInfo));
+        onResponse();
+    }
+
+    @Override
+    public void failure(EstimoteServerException e) {
+        Toast.makeText(this, "Beacon info download failure", Toast.LENGTH_SHORT).show();
+        onResponse();
+    }
+
+    private void onResponse() {
         if(counter <= competetionMacs.length){
             startMainActivity();
         } else {
             counter ++;
             downloadBeaconsData();
         }
-    }
-
-    @Override
-    public void failure(EstimoteServerException e) {
-        Toast.makeText(this, "Beacon info download failure", Toast.LENGTH_SHORT).show();
-        if(counter <= competetionMacs.length){
-            startMainActivity();
-        } else {
-            downloadBeaconsData();
-        }
-        counter ++;
     }
 
     private void startMainActivity() {
