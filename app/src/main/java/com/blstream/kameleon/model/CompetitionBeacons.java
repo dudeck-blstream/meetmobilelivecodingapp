@@ -29,7 +29,7 @@ public class CompetitionBeacons extends ArrayList<BeaconItem> {
 
     public BeaconItem findBeaconByMinor(int minor) {
         for (BeaconItem beacon : this) {
-            if (beacon.getMinor() == minor) {
+            if (beacon.minor == minor) {
                 return beacon;
             }
         }
@@ -38,7 +38,7 @@ public class CompetitionBeacons extends ArrayList<BeaconItem> {
 
     public BeaconItem getByName(String name) {
         for (BeaconItem beacon : this) {
-            if (Objects.equals(beacon.getName(), name)) {
+            if (Objects.equals(beacon.name, name)) {
                 return beacon;
             }
         }
