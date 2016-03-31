@@ -3,6 +3,7 @@ package com.blstream.kameleon;
 import com.estimote.sdk.EstimoteSDK;
 
 public class Application extends android.app.Application {
+
     @Override
     public void onCreate() {
         super.onCreate();
