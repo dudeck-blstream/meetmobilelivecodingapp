@@ -2,7 +2,6 @@ package com.blstream.kameleon;
 
 import com.blstream.kameleon.cache.BeaconCache;
 import com.blstream.kameleon.model.BeaconItem;
-import com.blstream.kameleon.model.CompetitionBeacons;
 import com.blstream.kameleon.util.BeaconUtils;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
@@ -24,8 +23,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     private BeaconManager beaconManager;
-
-    private CompetitionBeacons testBeacons;
 
     @Bind(R.id.progress)
     View progressView;
@@ -49,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         setupBeaconsIcon();
 
-        testBeacons = new CompetitionBeacons();
-
         setupBeaconManager();
     }
 
@@ -68,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateBeaconData(Iterable<Beacon> list) {
 
         for (Beacon beacon : list) {
-            BeaconItem beaconByMinor = testBeacons.findBeaconByMinor(beacon.getMinor());
+            BeaconItem beaconByMinor = BeaconCache.getInstance().findBeaconByMinor(beacon.getMinor());
             if (beaconByMinor != null) {
                 if (!beaconByMinor.isDiscovered()) {
                     double accuracy = Utils.computeAccuracy(beacon);
@@ -101,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         //            beaconBlue.setBackgroundColor(testBeaconBlue.getColor());
         //        } else {
         //            beaconBlue.setText(getString(R.string.beacon_info_pattern,
-        //                    CompetitionBeacons.BEACON_BLUE,
+        //                    BeaconList.BEACON_BLUE,
         //                    testBeaconBlue.getAccuracy()));
         //            int colorWithAlpha = BeaconUtils.adjustAlpha(testBeaconBlue);
         //            beaconBlue.setBackgroundColor(colorWithAlpha);
@@ -128,10 +123,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBeaconsDiscovered(Region region, List<Beacon> list) {
             if (!list.isEmpty()) {
-                if (testBeacons.areAllDiscovered()) {
+                BeaconCache beaconCache = BeaconCache.getInstance();
+                if (beaconCache.areAllDiscovered()) {
                     sendEmail();
-                    beaconManager.stopRanging(CompetitionBeacons.getRegion());
-                    beaconManager.stopMonitoring(CompetitionBeacons.getRegion());
+                    beaconManager.stopRanging(beaconCache.getRegion());
+                    beaconManager.stopMonitoring(beaconCache.getRegion());
                 } else {
                     updateBeaconData(list);
                 }
@@ -157,8 +153,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceReady() {
-            beaconManager.startRanging(CompetitionBeacons.getRegion());
-            beaconManager.startMonitoring(CompetitionBeacons.getRegion());
+            BeaconCache beaconCache = BeaconCache.getInstance();
+            beaconManager.startRanging(beaconCache.getRegion());
+            beaconManager.startMonitoring(beaconCache.getRegion());
         }
     }
 }
