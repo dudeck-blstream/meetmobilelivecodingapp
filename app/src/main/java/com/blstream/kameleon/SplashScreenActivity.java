@@ -1,5 +1,6 @@
 package com.blstream.kameleon;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +39,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     @Override
     public void success(BeaconInfo beaconInfo) {
         BeaconCache.getInstance().addBeacon((BeaconItem)beaconInfo);
-        if(counter >= competetionMacs.length){
+        if(counter <= competetionMacs.length){
             startMainActivity();
         } else {
             counter ++;
@@ -49,7 +50,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     @Override
     public void failure(EstimoteServerException e) {
         Toast.makeText(this, "Beacon info download failure", Toast.LENGTH_SHORT).show();
-        if(counter >= competetionMacs.length){
+        if(counter <= competetionMacs.length){
             startMainActivity();
         } else {
             downloadBeaconsData();
@@ -58,5 +59,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     }
 
     private void startMainActivity() {
+        final Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
