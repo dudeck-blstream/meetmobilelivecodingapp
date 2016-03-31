@@ -9,7 +9,7 @@ public class Application extends android.app.Application {
         super.onCreate();
 
         //  App ID & App Token can be taken from App section of Estimote Cloud.
-        EstimoteSDK.initialize(getApplicationContext(), "cameleon-5vf", "b706e95f843b8b10b8f19a82f69c48e2");
+        EstimoteSDK.initialize(getApplicationContext(), "blstream-sp--z-o-o--s-meet-81f", "0cf0ca5624ff00f5de4fdf6f39841bdb");
 
         // Optional, debug logging.
         EstimoteSDK.enableDebugLogging(true);
