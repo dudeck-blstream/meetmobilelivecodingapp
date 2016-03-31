@@ -10,7 +10,7 @@ import java.util.Objects;
 import com.estimote.sdk.cloud.model.Color;
 
 
-public class CompetentationBeacons extends ArrayList<BeaconId> {
+public class CompetitionBeacons extends ArrayList<BeaconId> {
 
     private static final Map<com.estimote.sdk.cloud.model.Color, Integer> BACKGROUND_COLORS = new HashMap<>();
 

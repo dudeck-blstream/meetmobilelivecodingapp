@@ -1,46 +1,50 @@
 package com.blstream.kameleon;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.TextView;
-
 import com.blstream.kameleon.model.BeaconId;
-import com.blstream.kameleon.model.CompetentationBeacons;
+import com.blstream.kameleon.model.CompetitionBeacons;
 import com.blstream.kameleon.util.BeaconUtils;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
+
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
     private BeaconManager beaconManager;
-    private CompetentationBeacons testBeacons;
 
-    private View progressView;
+    private CompetitionBeacons testBeacons;
 
-    private TextView beaconBlue;
-    private TextView beacon2;
-    private TextView beacon3;
+    @Bind(R.id.progress)
+    View progressView;
+
+    @Bind(R.id.beacon1)
+    TextView beaconBlue;
+
+    @Bind(R.id.beacon2)
+    TextView beacon2;
+
+    @Bind(R.id.beacon3)
+    TextView beacon3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        testBeacons = new CompetentationBeacons();
+        ButterKnife.bind(this);
 
-        progressView = findViewById(R.id.progress);
-
-        beaconBlue = (TextView) findViewById(R.id.beacon1);
-        beacon2 = (TextView) findViewById(R.id.beacon2);
-        beacon3 = (TextView) findViewById(R.id.beacon3);
+        testBeacons = new CompetitionBeacons();
 
         setupBeaconManager();
     }
@@ -67,24 +71,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         refreshUI();
-
     }
 
     private void refreshUI() {
-//        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
-//        BeaconId testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
-//        //TODO: list all beacons?!
-//        if (testBeaconBlue != null && testBeaconBlue.isDiscovered()) {
-//            beaconBlue.setText(getString(R.string.beacon_discovered));
-//            beaconBlue.setCompoundDrawablesWithIntrinsicBounds(discoveredDrawable, null, null, null);
-//            beaconBlue.setBackgroundColor(testBeaconBlue.getColor());
-//        } else {
-//            beaconBlue.setText(getString(R.string.beacon_info_pattern,
-//                    CompetentationBeacons.BEACON_BLUE,
-//                    testBeaconBlue.getAccuracy()));
-//            int colorWithAlpha = BeaconUtils.adjustAlpha(testBeaconBlue);
-//            beaconBlue.setBackgroundColor(colorWithAlpha);
-//        }
+        //        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
+        //        BeaconId testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
+        //        //TODO: list all beacons?!
+        //        if (testBeaconBlue != null && testBeaconBlue.isDiscovered()) {
+        //            beaconBlue.setText(getString(R.string.beacon_discovered));
+        //            beaconBlue.setCompoundDrawablesWithIntrinsicBounds(discoveredDrawable, null, null, null);
+        //            beaconBlue.setBackgroundColor(testBeaconBlue.getColor());
+        //        } else {
+        //            beaconBlue.setText(getString(R.string.beacon_info_pattern,
+        //                    CompetitionBeacons.BEACON_BLUE,
+        //                    testBeaconBlue.getAccuracy()));
+        //            int colorWithAlpha = BeaconUtils.adjustAlpha(testBeaconBlue);
+        //            beaconBlue.setBackgroundColor(colorWithAlpha);
+        //        }
     }
 
     private void sendEmail() {
@@ -103,13 +106,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class MyRangingListener implements BeaconManager.RangingListener {
+
         @Override
         public void onBeaconsDiscovered(Region region, List<Beacon> list) {
-            if(!list.isEmpty()) {
+            if (!list.isEmpty()) {
                 if (testBeacons.areAllDiscovered()) {
                     sendEmail();
-                    beaconManager.stopRanging(CompetentationBeacons.getRegion());
-                    beaconManager.stopMonitoring(CompetentationBeacons.getRegion());
+                    beaconManager.stopRanging(CompetitionBeacons.getRegion());
+                    beaconManager.stopMonitoring(CompetitionBeacons.getRegion());
                 } else {
                     updateBeaconData(list);
                 }
@@ -118,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class MyMonitoringListener implements BeaconManager.MonitoringListener {
+
         @Override
         public void onEnteredRegion(Region region, List<Beacon> list) {
             updateBeaconData(list);
@@ -131,10 +136,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class MyServiceReadyCallback implements BeaconManager.ServiceReadyCallback {
+
         @Override
         public void onServiceReady() {
-            beaconManager.startRanging(CompetentationBeacons.getRegion());
-            beaconManager.startMonitoring(CompetentationBeacons.getRegion());
+            beaconManager.startRanging(CompetitionBeacons.getRegion());
+            beaconManager.startMonitoring(CompetitionBeacons.getRegion());
         }
     }
 }
