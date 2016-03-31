@@ -1,7 +1,5 @@
 package com.blstream.kameleon.cache;
 
-import com.blstream.kameleon.model.BeaconId;
-import com.blstream.kameleon.model.CompetentationBeacons;
 import com.estimote.sdk.cloud.model.BeaconInfo;
 
 import java.util.ArrayList;
