@@ -49,10 +49,10 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     }
 
     private void onResponse() {
-        if(counter <= competetionMacs.length){
+        counter ++;
+        if(counter >= competetionMacs.length){
             startMainActivity();
         } else {
-            counter ++;
             downloadBeaconsData();
         }
     }
