@@ -3,18 +3,16 @@ package com.blstream.kameleon;
 import com.blstream.kameleon.cache.BeaconCache;
 import com.blstream.kameleon.model.BeaconItem;
 import com.blstream.kameleon.util.BeaconUtils;
+import com.blstream.kameleon.util.EmailUtil;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.progress)
     View progressView;
-
-    private ImageView[] beaconImage;
-
 
     Map<BeaconItem, BeaconViewHolder> viewMap = new HashMap<>();
 
@@ -89,39 +84,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private List<BeaconItem> getBeacons() {return BeaconCache.getInstance().getBeacons();}
-
-    private void setupBeaconColors(final View view) {
-        //
-        //        for (int i = 0; i < beacons.size(); i++) {
-        //            BeaconItem beaconItem = beacons.get(i);
-        //            int color = BeaconUtils.getColor(beaconItem);
-        //            ColorUtils.setColorFilter(beaconImage[i], color);
-        //        }
-
-        //        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
-        //        BeaconItem testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
-        //        //TODO: list all beaconImage?!
-        //        if (testBeaconBlue != null && testBeaconBlue.isDiscovered()) {
-        //            beaconBlue.setText(getString(R.string.beacon_discovered));
-        //            beaconBlue.setCompoundDrawablesWithIntrinsicBounds(discoveredDrawable, null, null, null);
-        //            beaconBlue.setBackgroundColor(testBeaconBlue.getColor());
-        //        } else {
-        //            beaconBlue.setText(getString(R.string.beacon_info_pattern,
-        //                    BeaconList.BEACON_BLUE,
-        //                    testBeaconBlue.getAccuracy()));
-        //            int colorWithAlpha = BeaconUtils.adjustAlpha(testBeaconBlue);
-        //            beaconBlue.setBackgroundColor(colorWithAlpha);
-        //        }
-    }
-
-    private void sendEmail() {
-        final Intent emailIntent = new Intent(Intent.ACTION_SENDTO,
-                Uri.fromParts("mailto", getString(R.string.bls_email_address), null));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "MeetMobile 5/4/2016 contest");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Am I the winner?");
-
-        startActivity(Intent.createChooser(emailIntent, "Choose your email app"));
+    private List<BeaconItem> getBeacons() {
+        return BeaconCache.getInstance().getBeacons();
     }
 
     @Override
@@ -137,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             if (!list.isEmpty()) {
                 final BeaconCache beaconCache = BeaconCache.getInstance();
                 if (beaconCache.areAllDiscovered()) {
-                    sendEmail();
+                    EmailUtil.sendEmail(getApplicationContext());
                     beaconManager.stopRanging(beaconCache.getRegion());
                     beaconManager.stopMonitoring(beaconCache.getRegion());
                 } else {

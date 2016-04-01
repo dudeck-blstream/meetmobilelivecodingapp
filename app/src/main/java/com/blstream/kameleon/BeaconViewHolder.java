@@ -38,7 +38,6 @@ public class BeaconViewHolder {
     }
 
     public void setAccuracy(final float aprox) {
-        //            float progress = (float) BeaconUtils.obtainAlphaFactor(beaconItem.getAccuracy());
         logger.setText(String.format("%.2f", aprox));
 
         float progress = aprox / BeaconItem.MAX_ACCURACY;

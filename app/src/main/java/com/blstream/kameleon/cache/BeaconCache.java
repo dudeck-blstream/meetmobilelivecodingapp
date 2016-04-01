@@ -2,11 +2,9 @@ package com.blstream.kameleon.cache;
 
 import com.blstream.kameleon.model.BeaconItem;
 import com.estimote.sdk.Region;
-import com.estimote.sdk.cloud.model.BeaconInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class BeaconCache {
     private static final String REGION_NAME = "TestRegion";
@@ -37,15 +35,6 @@ public class BeaconCache {
     public BeaconItem findBeaconByMinor(final int minor) {
         for (final BeaconItem beacon : beacons) {
             if (beacon.getBeaconInfo().minor == minor) {
-                return beacon;
-            }
-        }
-        return null;
-    }
-
-    public BeaconItem getByName(final String name) {
-        for (final BeaconItem beacon : beacons) {
-            if (Objects.equals(beacon.getBeaconInfo().name, name)) {
                 return beacon;
             }
         }
