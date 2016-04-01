@@ -27,7 +27,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         downloadBeaconsData();
     }
@@ -43,7 +43,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     }
 
     @Override
-    public void failure(EstimoteServerException e) {
+    public void failure(final EstimoteServerException e) {
         Toast.makeText(this, "Beacon info download failure", Toast.LENGTH_SHORT).show();
         onResponse();
     }

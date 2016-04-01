@@ -15,7 +15,7 @@ public class BeaconItem {
 
     private BeaconInfo beaconInfo;
 
-    public BeaconItem(BeaconInfo beaconInfo) {
+    public BeaconItem(final BeaconInfo beaconInfo) {
         this.beaconInfo = beaconInfo;
     }
 
@@ -23,7 +23,7 @@ public class BeaconItem {
         return isDiscovered;
     }
 
-    public void setDiscovered(boolean discovered) {
+    public void setDiscovered(final boolean discovered) {
         isDiscovered = discovered;
     }
 
@@ -31,7 +31,7 @@ public class BeaconItem {
         return accuracy < MIN_ACCURACY ? MIN_ACCURACY : (float) accuracy;
     }
 
-    public void setAccuracy(double accuracy) {
+    public void setAccuracy(final double accuracy) {
         this.accuracy = (this.accuracy + accuracy) / 2;
     }
 

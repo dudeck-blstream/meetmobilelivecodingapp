@@ -24,13 +24,13 @@ public class BeaconViewHolder {
 
     private int screenHeight = -1;
 
-    public BeaconViewHolder(ViewGroup view) {
+    public BeaconViewHolder(final ViewGroup view) {
         rootView = LayoutInflater.from(view.getContext()).inflate(R.layout.beacon_line, view, false);
         ButterKnife.bind(this, rootView);
         view.addView(rootView);
     }
 
-    public void setAccuracy(float aprox) {
+    public void setAccuracy(final float aprox) {
         //            float progress = (float) BeaconUtils.obtainAlphaFactor(beaconItem.getAccuracy());
         logger.setText(String.format("%.2f", aprox));
 
@@ -45,18 +45,18 @@ public class BeaconViewHolder {
         if (screenHeight != -1) {
             return screenHeight;
         }
-        Display display = rootView.getDisplay();
-        Point size = new Point();
+        final Display display = rootView.getDisplay();
+        final Point size = new Point();
         display.getSize(size);
         screenHeight = size.y;
         return screenHeight;
     }
 
-    public void setColor(int color) {
+    public void setColor(final int color) {
         background.setBackgroundColor(color);
     }
 
-    public void setProgress(float alpha) {
+    public void setProgress(final float alpha) {
         background.animate()
                 .setDuration(500)
                 .alpha(1 - alpha)

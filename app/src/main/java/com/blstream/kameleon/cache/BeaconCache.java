@@ -30,12 +30,12 @@ public class BeaconCache {
         return beacons;
     }
 
-    public void addBeacon(BeaconItem beaconInfo){
+    public void addBeacon(final BeaconItem beaconInfo){
         beacons.add(beaconInfo);
     }
 
-    public BeaconItem findBeaconByMinor(int minor) {
-        for (BeaconItem beacon : beacons) {
+    public BeaconItem findBeaconByMinor(final int minor) {
+        for (final BeaconItem beacon : beacons) {
             if (beacon.getBeaconInfo().minor == minor) {
                 return beacon;
             }
@@ -43,8 +43,8 @@ public class BeaconCache {
         return null;
     }
 
-    public BeaconItem getByName(String name) {
-        for (BeaconItem beacon : beacons) {
+    public BeaconItem getByName(final String name) {
+        for (final BeaconItem beacon : beacons) {
             if (Objects.equals(beacon.getBeaconInfo().name, name)) {
                 return beacon;
             }
@@ -53,7 +53,7 @@ public class BeaconCache {
     }
 
     public boolean areAllDiscovered() {
-        for (BeaconItem beacon : beacons) {
+        for (final BeaconItem beacon : beacons) {
             if (!beacon.isDiscovered()) {
                 return false;
             }

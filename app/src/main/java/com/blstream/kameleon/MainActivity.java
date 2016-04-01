@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
     Map<BeaconItem, BeaconViewHolder> viewMap = new HashMap<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        ViewGroup container = (ViewGroup) findViewById(R.id.beacon_container);
+        final ViewGroup container = (ViewGroup) findViewById(R.id.beacon_container);
 
         setupBeaconMap(container);
         setupBeaconManager();
@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
         beaconManager.setMonitoringListener(new MyMonitoringListener());
     }
 
-    private void updateBeaconData(Iterable<Beacon> list) {
+    private void updateBeaconData(final Iterable<Beacon> list) {
 
-        for (Beacon beacon : list) {
-            BeaconItem beaconByMinor = BeaconCache.getInstance().findBeaconByMinor(beacon.getMinor());
+        for (final Beacon beacon : list) {
+            final BeaconItem beaconByMinor = BeaconCache.getInstance().findBeaconByMinor(beacon.getMinor());
             if (beaconByMinor != null) {
                 //                if (!beaconByMinor.isDiscovered()) {
-                double accuracy = Utils.computeAccuracy(beacon);
+                final double accuracy = Utils.computeAccuracy(beacon);
                 beaconByMinor.setAccuracy(accuracy);
 
                 if (accuracy < BeaconUtils.DISCOVER_MIN_VALUE) {
@@ -73,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        List<BeaconItem> beacons = getBeacons();
+        final List<BeaconItem> beacons = getBeacons();
         for (final BeaconItem beacon : beacons) {
-            BeaconViewHolder beaconViewHolder = viewMap.get(beacon);
+            final BeaconViewHolder beaconViewHolder = viewMap.get(beacon);
             beaconViewHolder.setAccuracy(beacon.getAccuracy());
         }
     }
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupBeaconMap(final ViewGroup view) {
         final List<BeaconItem> beacons = getBeacons();
         for (final BeaconItem beacon : beacons) {
-            BeaconViewHolder beaconViewHolder = new BeaconViewHolder(view);
+            final BeaconViewHolder beaconViewHolder = new BeaconViewHolder(view);
             beaconViewHolder.setColor(BeaconUtils.getColor(beacon));
             viewMap.put(beacon, beaconViewHolder);
         }
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<BeaconItem> getBeacons() {return BeaconCache.getInstance().getBeacons();}
 
-    private void setupBeaconColors(View view) {
+    private void setupBeaconColors(final View view) {
         //
         //        for (int i = 0; i < beacons.size(); i++) {
         //            BeaconItem beaconItem = beacons.get(i);
@@ -133,9 +133,9 @@ public class MainActivity extends AppCompatActivity {
     private class MyRangingListener implements BeaconManager.RangingListener {
 
         @Override
-        public void onBeaconsDiscovered(Region region, List<Beacon> list) {
+        public void onBeaconsDiscovered(final Region region, final List<Beacon> list) {
             if (!list.isEmpty()) {
-                BeaconCache beaconCache = BeaconCache.getInstance();
+                final BeaconCache beaconCache = BeaconCache.getInstance();
                 if (beaconCache.areAllDiscovered()) {
                     sendEmail();
                     beaconManager.stopRanging(beaconCache.getRegion());
@@ -150,13 +150,13 @@ public class MainActivity extends AppCompatActivity {
     private class MyMonitoringListener implements BeaconManager.MonitoringListener {
 
         @Override
-        public void onEnteredRegion(Region region, List<Beacon> list) {
+        public void onEnteredRegion(final Region region, final List<Beacon> list) {
             updateBeaconData(list);
             progressView.setVisibility(View.GONE);
         }
 
         @Override
-        public void onExitedRegion(Region region) {
+        public void onExitedRegion(final Region region) {
             progressView.setVisibility(View.VISIBLE);
         }
     }
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onServiceReady() {
-            BeaconCache beaconCache = BeaconCache.getInstance();
+            final BeaconCache beaconCache = BeaconCache.getInstance();
             beaconManager.startRanging(beaconCache.getRegion());
             beaconManager.startMonitoring(beaconCache.getRegion());
         }
