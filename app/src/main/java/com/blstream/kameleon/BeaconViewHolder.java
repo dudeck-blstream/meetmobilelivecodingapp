@@ -69,7 +69,6 @@ public class BeaconViewHolder {
 
         if (discovered) {
             icon.setImageDrawable(ContextCompat.getDrawable(icon.getContext(), R.drawable.ic_action_done));
-            icon.animate().scaleX(2).scaleY(2).setDuration(300).start();
         } else {
             icon.setImageDrawable(ContextCompat.getDrawable(icon.getContext(), R.drawable.beacon));
         }

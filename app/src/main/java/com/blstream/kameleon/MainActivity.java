@@ -10,6 +10,7 @@ import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.progress)
     View progressView;
+
+    @Bind(R.id.main_container)
+    View container;
 
     Map<BeaconItem, BeaconViewHolder> viewMap = new HashMap<>();
 
@@ -101,14 +105,26 @@ public class MainActivity extends AppCompatActivity {
             if (!list.isEmpty()) {
                 final BeaconCache beaconCache = BeaconCache.getInstance();
                 if (beaconCache.areAllDiscovered()) {
-                    EmailUtil.sendEmail(getApplicationContext());
+
                     beaconManager.stopRanging(beaconCache.getRegion());
                     beaconManager.stopMonitoring(beaconCache.getRegion());
+
+                    showSuccessMessage();
                 } else {
                     updateBeaconData(list);
                 }
             }
         }
+    }
+
+    private void showSuccessMessage() {
+        Snackbar.make(container, "Sprawdź czy wygrałeś!", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Wyślij", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        EmailUtil.sendEmail(MainActivity.this);
+                    }
+                }).show();
     }
 
     private class MyMonitoringListener implements BeaconManager.MonitoringListener {
