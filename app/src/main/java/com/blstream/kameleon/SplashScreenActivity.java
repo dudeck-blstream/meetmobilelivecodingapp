@@ -18,17 +18,19 @@ import android.widget.Toast;
 
 public class SplashScreenActivity extends AppCompatActivity implements CloudCallback<BeaconInfo> {
 
-    private static final MacAddress[] competetionMacs = new MacAddress[]{
+    private static final MacAddress[] competetionMacs = new MacAddress[] {
             MacAddress.fromString("E3:1F:1E:92:43:B8"),
             MacAddress.fromString("C2:1D:2D:80:24:59"),
             MacAddress.fromString("F5:31:AE:01:97:52")
     };
+
     private int counter;
 
 
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BeaconCache.getInstance().getBeacons().clear();
         downloadBeaconsData();
     }
 
@@ -38,7 +40,8 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
 
     @Override
     public void success(final BeaconInfo beaconInfo) {
-        BeaconCache.getInstance().addBeacon(new BeaconItem(beaconInfo));
+        BeaconCache instance = BeaconCache.getInstance();
+        instance.addBeacon(new BeaconItem(beaconInfo));
         onResponse();
     }
 
@@ -49,8 +52,8 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     }
 
     private void onResponse() {
-        counter ++;
-        if(counter >= competetionMacs.length){
+        counter++;
+        if (counter >= competetionMacs.length) {
             startMainActivity();
         } else {
             downloadBeaconsData();

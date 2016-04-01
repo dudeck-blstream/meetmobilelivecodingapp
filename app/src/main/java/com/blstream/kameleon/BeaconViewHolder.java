@@ -3,10 +3,12 @@ package com.blstream.kameleon;
 import com.blstream.kameleon.model.BeaconItem;
 
 import android.graphics.Point;
+import android.support.v4.content.ContextCompat;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -20,9 +22,14 @@ public class BeaconViewHolder {
     @Bind(R.id.logger)
     TextView logger;
 
+    @Bind(R.id.beacon_icon)
+    ImageView icon;
+
     View rootView;
 
     private int screenHeight = -1;
+
+    private boolean isDiscavered = false;
 
     public BeaconViewHolder(final ViewGroup view) {
         rootView = LayoutInflater.from(view.getContext()).inflate(R.layout.beacon_line, view, false);
@@ -54,6 +61,19 @@ public class BeaconViewHolder {
 
     public void setColor(final int color) {
         background.setBackgroundColor(color);
+    }
+
+    public void setDiscovered(final boolean discovered) {
+        if (isDiscavered == discovered) {
+            return;
+        }
+
+        if (discovered) {
+            icon.setImageDrawable(ContextCompat.getDrawable(icon.getContext(), R.drawable.ic_action_done));
+            icon.animate().scaleX(2).scaleY(2).setDuration(300).start();
+        } else {
+            icon.setImageDrawable(ContextCompat.getDrawable(icon.getContext(), R.drawable.beacon));
+        }
     }
 
     public void setProgress(final float alpha) {

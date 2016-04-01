@@ -55,18 +55,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBeaconData(final Iterable<Beacon> list) {
-
         for (final Beacon beacon : list) {
             final BeaconItem beaconByMinor = BeaconCache.getInstance().findBeaconByMinor(beacon.getMinor());
             if (beaconByMinor != null) {
-                //                if (!beaconByMinor.isDiscovered()) {
-                final double accuracy = Utils.computeAccuracy(beacon);
-                beaconByMinor.setAccuracy(accuracy);
+                if (!beaconByMinor.isDiscovered()) {
+                    final double accuracy = Utils.computeAccuracy(beacon);
+                    beaconByMinor.setAccuracy(accuracy);
 
-                if (accuracy < BeaconUtils.DISCOVER_MIN_VALUE) {
-                    beaconByMinor.setDiscovered(true);
+                    if (accuracy < BeaconUtils.DISCOVER_MIN_VALUE) {
+                        beaconByMinor.setDiscovered(true);
+                    }
                 }
-                //                }
             }
         }
         updateUI();
@@ -77,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         for (final BeaconItem beacon : beacons) {
             final BeaconViewHolder beaconViewHolder = viewMap.get(beacon);
             beaconViewHolder.setAccuracy(beacon.getAccuracy());
+            beaconViewHolder.setDiscovered(beacon.isDiscovered());
         }
     }
 

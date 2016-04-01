@@ -32,7 +32,7 @@ public class BeaconItem {
     }
 
     public void setAccuracy(final double accuracy) {
-        this.accuracy = (this.accuracy + accuracy) / 2;
+        this.accuracy = accuracy;
     }
 
     public BeaconInfo getBeaconInfo() {

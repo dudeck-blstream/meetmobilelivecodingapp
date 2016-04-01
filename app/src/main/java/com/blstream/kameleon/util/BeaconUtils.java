@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class BeaconUtils {
 
-    public static final double DISCOVER_MIN_VALUE = 0.01;
+    public static final double DISCOVER_MIN_VALUE = 0.05;
 
     public static final double DISCOVER_MAX_VALUE = 10;
 
