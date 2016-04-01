@@ -30,6 +30,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
         BeaconCache.getInstance().getBeacons().clear();
         downloadBeaconsData();
     }
