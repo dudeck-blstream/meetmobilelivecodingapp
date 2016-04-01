@@ -1,7 +1,6 @@
 package com.blstream.kameleon;
 
 import com.blstream.kameleon.model.BeaconItem;
-import com.blstream.kameleon.util.LimitedQueue;
 
 import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
@@ -28,8 +27,6 @@ public class BeaconViewHolder {
 
     View rootView;
 
-    private LimitedQueue accurency = new LimitedQueue(3);
-
     private int screenHeight = -1;
 
     private boolean isDiscavered = false;
@@ -40,15 +37,14 @@ public class BeaconViewHolder {
         view.addView(rootView);
     }
 
-    public void setAccuracy(final double aprox) {
-        accurency.add(aprox);
+    public void setAccuracy(final float aprox) {
         logger.setText(String.format("%.2f", aprox));
 
-        double progress = accurency.getAverage() / BeaconItem.MAX_ACCURACY;
+        float progress = aprox / BeaconItem.MAX_ACCURACY;
         if (progress > 1) {
             progress = 1;
         }
-        setProgress((float) progress);
+        setProgress(progress);
     }
 
     public int getHeight() {

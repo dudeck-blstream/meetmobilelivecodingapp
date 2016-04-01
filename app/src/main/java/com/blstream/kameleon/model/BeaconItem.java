@@ -27,8 +27,8 @@ public class BeaconItem {
         isDiscovered = discovered;
     }
 
-    public double getAccuracy() {
-        return accuracy < MIN_ACCURACY ? MIN_ACCURACY : accuracy;
+    public float getAccuracy() {
+        return accuracy < MIN_ACCURACY ? MIN_ACCURACY : (float) accuracy;
     }
 
     public void setAccuracy(final double accuracy) {
