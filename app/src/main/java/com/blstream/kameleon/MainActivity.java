@@ -13,9 +13,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,16 +30,10 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.progress)
     View progressView;
 
-    @Bind(R.id.beacon1)
-    ImageView beaconBlue;
+    private ImageView[] beaconImage;
 
-    @Bind(R.id.beacon2)
-    ImageView beacon2;
 
-    @Bind(R.id.beacon3)
-    ImageView beacon3;
-
-    private ImageView[] beacons;
+    Map<BeaconItem, BeaconViewHolder> viewMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +41,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        setupBeaconsIcon();
+        ViewGroup container = (ViewGroup) findViewById(R.id.beacon_container);
 
+        setupBeaconMap(container);
         setupBeaconManager();
-    }
-
-    private void setupBeaconsIcon() {
-        beacons = new ImageView[] {beaconBlue, beacon2, beacon3};
     }
 
     private void setupBeaconManager() {
@@ -65,31 +59,49 @@ public class MainActivity extends AppCompatActivity {
         for (Beacon beacon : list) {
             BeaconItem beaconByMinor = BeaconCache.getInstance().findBeaconByMinor(beacon.getMinor());
             if (beaconByMinor != null) {
-                if (!beaconByMinor.isDiscovered()) {
-                    double accuracy = Utils.computeAccuracy(beacon);
-                    beaconByMinor.setAccuracy(accuracy);
+                //                if (!beaconByMinor.isDiscovered()) {
+                double accuracy = Utils.computeAccuracy(beacon);
+                beaconByMinor.setAccuracy(accuracy);
 
-                    if (accuracy < BeaconUtils.DISCOVER_MIN_VALUE) {
-                        beaconByMinor.setDiscovered(true);
-                    }
+                if (accuracy < BeaconUtils.DISCOVER_MIN_VALUE) {
+                    beaconByMinor.setDiscovered(true);
                 }
+                //                }
             }
         }
-        refreshUI();
+        updateUI();
     }
 
-    private void refreshUI() {
-        for (final BeaconItem beaconItem : BeaconCache.getInstance().getBeacons()) {
-
-
-
-
+    private void updateUI() {
+        List<BeaconItem> beacons = getBeacons();
+        for (final BeaconItem beacon : beacons) {
+            BeaconViewHolder beaconViewHolder = viewMap.get(beacon);
+            beaconViewHolder.setAccuracy(beacon.getAccuracy());
         }
+    }
 
+    private void setupBeaconMap(final ViewGroup view) {
+        final List<BeaconItem> beacons = getBeacons();
+        for (final BeaconItem beacon : beacons) {
+            BeaconViewHolder beaconViewHolder = new BeaconViewHolder(view);
+            beaconViewHolder.setColor(BeaconUtils.getColor(beacon));
+            viewMap.put(beacon, beaconViewHolder);
+        }
+    }
+
+    private List<BeaconItem> getBeacons() {return BeaconCache.getInstance().getBeacons();}
+
+    private void setupBeaconColors(View view) {
+        //
+        //        for (int i = 0; i < beacons.size(); i++) {
+        //            BeaconItem beaconItem = beacons.get(i);
+        //            int color = BeaconUtils.getColor(beaconItem);
+        //            ColorUtils.setColorFilter(beaconImage[i], color);
+        //        }
 
         //        Drawable discoveredDrawable = ContextCompat.getDrawable(this, R.drawable.ic_action_done);
         //        BeaconItem testBeaconBlue = testBeacons.getByName("Icy Marshmallow");
-        //        //TODO: list all beacons?!
+        //        //TODO: list all beaconImage?!
         //        if (testBeaconBlue != null && testBeaconBlue.isDiscovered()) {
         //            beaconBlue.setText(getString(R.string.beacon_discovered));
         //            beaconBlue.setCompoundDrawablesWithIntrinsicBounds(discoveredDrawable, null, null, null);

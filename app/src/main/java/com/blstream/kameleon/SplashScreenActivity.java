@@ -1,11 +1,5 @@
 package com.blstream.kameleon;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
-
 import com.blstream.kameleon.cache.BeaconCache;
 import com.blstream.kameleon.model.BeaconItem;
 import com.estimote.sdk.MacAddress;
@@ -13,6 +7,12 @@ import com.estimote.sdk.cloud.CloudCallback;
 import com.estimote.sdk.cloud.EstimoteCloud;
 import com.estimote.sdk.cloud.model.BeaconInfo;
 import com.estimote.sdk.exception.EstimoteServerException;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 
 
@@ -37,7 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     }
 
     @Override
-    public void success(BeaconInfo beaconInfo) {
+    public void success(final BeaconInfo beaconInfo) {
         BeaconCache.getInstance().addBeacon(new BeaconItem(beaconInfo));
         onResponse();
     }

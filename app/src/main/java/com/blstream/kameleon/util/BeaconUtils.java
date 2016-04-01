@@ -8,7 +8,8 @@ import java.util.Map;
 
 public class BeaconUtils {
 
-    public static final double DISCOVER_MIN_VALUE = 0.5;
+    public static final double DISCOVER_MIN_VALUE = 0.01;
+
     public static final double DISCOVER_MAX_VALUE = 10;
 
     private static final Map<Color, Integer> BEACON_COLORS = new HashMap<>();
@@ -19,9 +20,8 @@ public class BeaconUtils {
         BEACON_COLORS.put(Color.MINT_COCKTAIL, android.graphics.Color.rgb(155, 186, 160));
     }
 
-
     public static double obtainAlphaFactor(double beaconAccuracy) {
-        return 1 - beaconAccuracy / DISCOVER_MAX_VALUE;
+        return 1 - (beaconAccuracy / DISCOVER_MAX_VALUE);
     }
 
     public static int adjustAlpha(BeaconItem beacon) {
@@ -34,7 +34,7 @@ public class BeaconUtils {
         return android.graphics.Color.argb(alpha, red, green, blue);
     }
 
-    private static int getColor(BeaconItem beaconItem){
+    public static int getColor(BeaconItem beaconItem) {
         return BEACON_COLORS.get(beaconItem.getBeaconInfo().color);
     }
 }

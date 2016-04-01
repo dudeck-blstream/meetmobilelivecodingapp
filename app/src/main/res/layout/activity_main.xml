@@ -6,22 +6,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="60dp"
+            android:background="#FF0000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:text="Reach at least the line to win the prize" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/beacon_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        android:background="#CCC"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/beacon1"
-            style="@style/BeaconItem" />
-
-        <ImageView
-            android:id="@+id/beacon2"
-            style="@style/BeaconItem" />
-
-        <ImageView
-            android:id="@+id/beacon3"
-            style="@style/BeaconItem" />
+        android:orientation="horizontal">
 
     </LinearLayout>
 

@@ -1,12 +1,19 @@
 package com.blstream.kameleon.model;
 
 import com.estimote.sdk.cloud.model.BeaconInfo;
+import com.estimote.sdk.cloud.model.Color;
 
 public class BeaconItem {
-    private boolean isDiscovered;
-    private double accuracy;
-    private BeaconInfo beaconInfo;
 
+    public static final float MIN_ACCURACY = 0.1f;
+
+    public static final float MAX_ACCURACY = 10;
+
+    private boolean isDiscovered;
+
+    private double accuracy = MAX_ACCURACY;
+
+    private BeaconInfo beaconInfo;
 
     public BeaconItem(BeaconInfo beaconInfo) {
         this.beaconInfo = beaconInfo;
@@ -20,15 +27,19 @@ public class BeaconItem {
         isDiscovered = discovered;
     }
 
-    public double getAccuracy() {
-        return accuracy;
+    public float getAccuracy() {
+        return accuracy < MIN_ACCURACY ? MIN_ACCURACY : (float) accuracy;
     }
 
     public void setAccuracy(double accuracy) {
-        this.accuracy = accuracy;
+        this.accuracy = (this.accuracy + accuracy) / 2;
     }
 
     public BeaconInfo getBeaconInfo() {
         return beaconInfo;
+    }
+
+    public Color getColor() {
+        return beaconInfo.color;
     }
 }
