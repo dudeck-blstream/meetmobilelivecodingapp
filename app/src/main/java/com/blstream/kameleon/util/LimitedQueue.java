@@ -6,7 +6,7 @@ public class LimitedQueue extends LinkedList<Double> {
 
     private final int limit;
 
-    LimitedQueue(int limit) {
+    public LimitedQueue(int limit) {
         this.limit = limit;
     }
 
