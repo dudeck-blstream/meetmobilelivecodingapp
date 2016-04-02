@@ -41,7 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
 
     @Override
     public void success(final BeaconInfo beaconInfo) {
-        BeaconCache instance = BeaconCache.getInstance();
+        final BeaconCache instance = BeaconCache.getInstance();
         instance.addBeacon(new BeaconItem(beaconInfo));
         onResponse();
     }
@@ -64,5 +64,6 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
     private void startMainActivity() {
         final Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 }

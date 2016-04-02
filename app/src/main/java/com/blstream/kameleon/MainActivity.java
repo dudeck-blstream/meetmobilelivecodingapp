@@ -46,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
         setupBeaconManager();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     private void setupBeaconManager() {
         beaconManager = new BeaconManager(this);
         beaconManager.connect(new MyServiceReadyCallback());

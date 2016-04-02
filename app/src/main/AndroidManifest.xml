@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.blstream.kameleon">
+<manifest package="com.blstream.kameleon"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Required to scan for and connect to Estimote Beacons via Bluetooth. -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashScreenActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,8 +25,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

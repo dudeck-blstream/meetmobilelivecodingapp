@@ -2,9 +2,7 @@ package com.blstream.kameleon;
 
 import com.blstream.kameleon.model.BeaconItem;
 
-import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +23,14 @@ public class BeaconViewHolder {
     @Bind(R.id.beacon_icon)
     ImageView icon;
 
-    View rootView;
+    BeaconLine rootView;
 
-    private int screenHeight = -1;
-
-    private boolean isDiscavered = false;
+    private boolean isDiscovered = false;
 
     public BeaconViewHolder(final ViewGroup view) {
-        rootView = LayoutInflater.from(view.getContext()).inflate(R.layout.beacon_line, view, false);
+        rootView = (BeaconLine) LayoutInflater.from(view.getContext()).inflate(R.layout.beacon_line, view, false);
         ButterKnife.bind(this, rootView);
+        background.setTranslationY(2000);
         view.addView(rootView);
     }
 
@@ -47,26 +44,15 @@ public class BeaconViewHolder {
         setProgress(progress);
     }
 
-    public int getHeight() {
-        if (screenHeight != -1) {
-            return screenHeight;
-        }
-        final Display display = rootView.getDisplay();
-        final Point size = new Point();
-        display.getSize(size);
-        screenHeight = size.y;
-        return screenHeight;
-    }
-
     public void setColor(final int color) {
         background.setBackgroundColor(color);
     }
 
     public void setDiscovered(final boolean discovered) {
-        if (isDiscavered == discovered) {
+        if (isDiscovered == discovered) {
             return;
         }
-
+        isDiscovered = discovered;
         if (discovered) {
             icon.setImageDrawable(ContextCompat.getDrawable(icon.getContext(), R.drawable.ic_action_done));
         } else {
@@ -78,7 +64,7 @@ public class BeaconViewHolder {
         background.animate()
                 .setDuration(500)
                 .alpha(1 - alpha)
-                .translationY(alpha * getHeight())
+                .translationY(alpha * rootView.getLineHeight())
                 .start();
     }
 }

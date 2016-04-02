@@ -18,10 +18,9 @@
         android:layout_below="@id/logo">
 
         <ProgressBar
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:indeterminateDrawable="@drawable/universal_loading_progress_indeterminate" />
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center" />
     </FrameLayout>
 
 </RelativeLayout>
