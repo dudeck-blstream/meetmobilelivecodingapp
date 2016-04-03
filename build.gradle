@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.1.0-alpha4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -18,6 +18,27 @@ allprojects {
     }
 }
 
+ext {
+    def keystorePropsFile = rootProject.file('keystore/keystore.properties')
+    ANDROID_KEYSTORE_LOCATION = getProperty('ANDROID_KEYSTORE_LOCATION', keystorePropsFile)
+    ANDROID_KEYSTORE_PASSWORD = getProperty('ANDROID_KEYSTORE_PASSWORD', keystorePropsFile)
+    ANDROID_KEYSTORE_ALIAS = getProperty('ANDROID_KEYSTORE_ALIAS', keystorePropsFile)
+    ANDROID_KEYSTORE_ALIAS_PASSWORD = getProperty('ANDROID_KEYSTORE_ALIAS_PASSWORD', keystorePropsFile)
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+/******************************GENERAL PURPOSE GRADLE UTILITIES ***********************************/
+static def getProperty(String prop, File propsFile) {
+    if (propsFile.exists()) {
+        //if the user has a properties file, get the username and pass from there
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+        return props[prop]
+    } else {
+        //if not, try the environment variables (for ci / build servers)
+        return System.getenv(prop)
+    }
 }

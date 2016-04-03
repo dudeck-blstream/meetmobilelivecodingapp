@@ -17,10 +17,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("keystore/android.jks")
-            storePassword "blslublin"
-            keyAlias "BLSKey"
-            keyPassword "blslublin"
+            storeFile file(rootProject.ext.ANDROID_KEYSTORE_LOCATION)
+            storePassword rootProject.ext.ANDROID_KEYSTORE_PASSWORD
+            keyAlias rootProject.ext.ANDROID_KEYSTORE_ALIAS
+            keyPassword rootProject.ext.ANDROID_KEYSTORE_ALIAS_PASSWORD
         }
     }
 

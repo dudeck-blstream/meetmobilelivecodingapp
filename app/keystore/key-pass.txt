@@ -1,5 +1,0 @@
-﻿keystore android.jks
-pass: blslublin
-
-key: BLSKey
-pass: blslublin
