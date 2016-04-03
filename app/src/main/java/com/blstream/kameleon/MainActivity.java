@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ViewGroup container = (ViewGroup) findViewById(R.id.beacon_container);
 
-        setupBeaconMap(container);
+        setupBeaconViewMap(container);
         setupBeaconManager();
     }
 
@@ -52,11 +52,21 @@ public class MainActivity extends AppCompatActivity {
         updateUI();
     }
 
+
+    private void setupBeaconViewMap(final ViewGroup view) {
+        final List<BeaconItem> beacons = getBeacons();
+        for (final BeaconItem beacon : beacons) {
+            final BeaconViewHolder beaconViewHolder = new BeaconViewHolder(view);
+            beaconViewHolder.setColor(BeaconUtils.getColor(beacon));
+            viewMap.put(beacon, beaconViewHolder);
+        }
+    }
+
     private void setupBeaconManager() {
         beaconManager = new BeaconManager(this);
         beaconManager.connect(new MyServiceReadyCallback());
-        beaconManager.setRangingListener(new MyRangingListener());
         beaconManager.setMonitoringListener(new MyMonitoringListener());
+        beaconManager.setRangingListener(new MyRangingListener());
     }
 
     private void updateBeaconData(final Iterable<Beacon> list) {
@@ -85,15 +95,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setupBeaconMap(final ViewGroup view) {
-        final List<BeaconItem> beacons = getBeacons();
-        for (final BeaconItem beacon : beacons) {
-            final BeaconViewHolder beaconViewHolder = new BeaconViewHolder(view);
-            beaconViewHolder.setColor(BeaconUtils.getColor(beacon));
-            viewMap.put(beacon, beaconViewHolder);
-        }
-    }
-
     private List<BeaconItem> getBeacons() {
         return BeaconCache.getInstance().getBeacons();
     }
@@ -104,33 +105,13 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private class MyRangingListener implements BeaconManager.RangingListener {
+    private class MyServiceReadyCallback implements BeaconManager.ServiceReadyCallback {
 
         @Override
-        public void onBeaconsDiscovered(final Region region, final List<Beacon> list) {
-            if (!list.isEmpty()) {
-                final BeaconCache beaconCache = BeaconCache.getInstance();
-                if (beaconCache.areAllDiscovered()) {
-
-                    beaconManager.stopRanging(beaconCache.getRegion());
-                    beaconManager.stopMonitoring(beaconCache.getRegion());
-
-                    showSuccessMessage();
-                } else {
-                    updateBeaconData(list);
-                }
-            }
+        public void onServiceReady() {
+            beaconManager.startRanging(BeaconCache.getRegion());
+            beaconManager.startMonitoring(BeaconCache.getRegion());
         }
-    }
-
-    private void showSuccessMessage() {
-        Snackbar.make(container, "Sprawdź czy wygrałeś!", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Wyślij", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EmailUtil.sendEmail(MainActivity.this);
-                    }
-                }).show();
     }
 
     private class MyMonitoringListener implements BeaconManager.MonitoringListener {
@@ -140,20 +121,35 @@ public class MainActivity extends AppCompatActivity {
             updateBeaconData(list);
             progressView.setVisibility(View.GONE);
         }
-
         @Override
         public void onExitedRegion(final Region region) {
             progressView.setVisibility(View.VISIBLE);
         }
     }
 
-    private class MyServiceReadyCallback implements BeaconManager.ServiceReadyCallback {
-
+    private class MyRangingListener implements BeaconManager.RangingListener {
         @Override
-        public void onServiceReady() {
-            final BeaconCache beaconCache = BeaconCache.getInstance();
-            beaconManager.startRanging(beaconCache.getRegion());
-            beaconManager.startMonitoring(beaconCache.getRegion());
+        public void onBeaconsDiscovered(final Region region, final List<Beacon> list) {
+            if (!list.isEmpty()) {
+                final BeaconCache beaconCache = BeaconCache.getInstance();
+                if (beaconCache.areAllDiscovered()) {
+                    beaconManager.stopRanging(BeaconCache.getRegion());
+                    beaconManager.stopMonitoring(BeaconCache.getRegion());
+
+                    showSuccessMessage();
+                } else {
+                    updateBeaconData(list);
+                }
+            }
+        }
+        private void showSuccessMessage() {
+            Snackbar.make(container, "Sprawdź czy wygrałeś!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Wyślij", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            EmailUtil.sendEmail(MainActivity.this);
+                        }
+                    }).show();
         }
     }
 }
