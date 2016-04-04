@@ -25,7 +25,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int LOCATION_PERMISSION = 123;
     private BeaconManager beaconManager;
 
     @Bind(R.id.progress)
