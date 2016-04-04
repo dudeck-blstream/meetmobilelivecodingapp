@@ -15,10 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 
-
 public class SplashScreenActivity extends AppCompatActivity implements CloudCallback<BeaconInfo> {
 
-    private static final MacAddress[] competetionMacs = new MacAddress[] {
+    private static final MacAddress[] competetionMacs = new MacAddress[]{
             MacAddress.fromString("E3:1F:1E:92:43:B8"),
             MacAddress.fromString("C2:1D:2D:80:24:59"),
             MacAddress.fromString("F5:31:AE:01:97:52")
@@ -48,8 +47,7 @@ public class SplashScreenActivity extends AppCompatActivity implements CloudCall
 
     @Override
     public void failure(final EstimoteServerException e) {
-        Toast.makeText(this, "Beacon info download failure", Toast.LENGTH_SHORT).show();
-        onResponse();
+        Toast.makeText(this, "Beacon info download failure. \nCheck Internet connection.", Toast.LENGTH_LONG).show();
     }
 
     private void onResponse() {
