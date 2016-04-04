@@ -7,6 +7,7 @@ import com.blstream.kameleon.util.EmailUtil;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.SystemRequirementsChecker;
 import com.estimote.sdk.Utils;
 
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int LOCATION_PERMISSION = 123;
     private BeaconManager beaconManager;
 
     @Bind(R.id.progress)
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateUI();
+        SystemRequirementsChecker.checkWithDefaultDialogs(this);
     }
 
 
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             updateBeaconData(list);
             progressView.setVisibility(View.GONE);
         }
+
         @Override
         public void onExitedRegion(final Region region) {
             progressView.setVisibility(View.VISIBLE);
@@ -142,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+
         private void showSuccessMessage() {
             Snackbar.make(container, "Sprawdź czy wygrałeś!", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Wyślij", new View.OnClickListener() {
