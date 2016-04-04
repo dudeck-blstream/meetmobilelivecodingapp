@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class BeaconUtils {
 
-    public static final double DISCOVER_MIN_VALUE = 2.3;
+    public static final double DISCOVER_MIN_VALUE = 2.0;
 
     private static final Map<Color, Integer> BEACON_COLORS = new HashMap<>();
 
