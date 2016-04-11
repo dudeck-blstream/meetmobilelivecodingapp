@@ -15,14 +15,6 @@ android {
         project.ext.set("archivesBaseName", "Kameleon-" + versionName + "-b" + versionCode);
     }
 
-    signingConfigs {
-        release {
-            storeFile file(rootProject.ext.ANDROID_KEYSTORE_LOCATION)
-            storePassword rootProject.ext.ANDROID_KEYSTORE_PASSWORD
-            keyAlias rootProject.ext.ANDROID_KEYSTORE_ALIAS
-            keyPassword rootProject.ext.ANDROID_KEYSTORE_ALIAS_PASSWORD
-        }
-    }
 
     buildTypes {
         release {
