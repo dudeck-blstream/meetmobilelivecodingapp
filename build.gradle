@@ -18,13 +18,6 @@ allprojects {
     }
 }
 
-ext {
-    def keystorePropsFile = rootProject.file('keystore/keystore.properties')
-    ANDROID_KEYSTORE_LOCATION = getProperty('ANDROID_KEYSTORE_LOCATION', keystorePropsFile)
-    ANDROID_KEYSTORE_PASSWORD = getProperty('ANDROID_KEYSTORE_PASSWORD', keystorePropsFile)
-    ANDROID_KEYSTORE_ALIAS = getProperty('ANDROID_KEYSTORE_ALIAS', keystorePropsFile)
-    ANDROID_KEYSTORE_ALIAS_PASSWORD = getProperty('ANDROID_KEYSTORE_ALIAS_PASSWORD', keystorePropsFile)
-}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
